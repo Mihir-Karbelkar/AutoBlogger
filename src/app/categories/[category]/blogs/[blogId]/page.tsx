@@ -18,7 +18,7 @@ export default async function EditTopic({
 }) {
   const data = await getInitialData(category, blogId);
   console.log(data, `/api/categories/${category}/topics/${blogId}`, "DATA");
-  const { content } = data;
+  const { content, keywords, topic } = data;
   return (
     <>
       {mode === "edit" ? (
@@ -27,6 +27,8 @@ export default async function EditTopic({
           category={category}
           blogId={blogId}
           defaultValue={content}
+          keywords={keywords}
+          topic={topic}
         />
       ) : (
         <div dangerouslySetInnerHTML={{ __html: content }} />

@@ -1,27 +1,51 @@
 "use client";
-import RichTextEditor from "@autoblogger/app/components/editor";
+import dynamic from "next/dynamic";
 import { redirect, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState, useEffect } from "react";
+import EditorJS from "@editorjs/editorjs";
+import { useCompletion } from "ai/react";
+import { Keyword } from "@prisma/client";
+
+const Editor = dynamic(() => import("@autoblogger/app/components/editor"));
 
 export default function BlogEditor(props: {
   defaultValue: string;
   category: string;
   blogId: string;
   mode: "edit" | "view";
+  keywords: Keyword[];
+  topic: string;
 }) {
-  const { defaultValue, category, blogId, mode } = props;
+  const { defaultValue, category, blogId, mode, topic, keywords } = props;
   const [content, setContent] = useState(defaultValue);
-  console.log(defaultValue, "DEFAULT");
   const router = useRouter();
+  const blogEditorRef = useRef<EditorJS>();
+  const { complete, completion, isLoading } = useCompletion({
+    api: "/api/completion",
+  });
+
+  console.log(completion, "Completion");
   return (
     <div className="relative">
-      <RichTextEditor
+      <Editor
         defaultValue={defaultValue}
         onChange={(currentContent) => {
           setContent(currentContent);
         }}
-        disable={mode === "view"}
+        setContents={completion}
       />
+      {/* <Editor editorRef={blogEditorRef} holder="blog-editor" /> */}
+      <button
+        onClick={async () => {
+          complete(
+            `Write a blog in 50 words on ${topic} with keywords - ${keywords
+              .map((key) => key.key)
+              .join(", ")} :`
+          );
+        }}
+      >
+        save
+      </button>
       <button
         className="absolute right-5 top-3 z-10"
         type="button"

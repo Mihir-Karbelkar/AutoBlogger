@@ -64,7 +64,7 @@ model VerificationRequest {
 
 model BlogPost {
   id String @id @default(cuid())
-  content String?
+  content Json?
   userId String
   categoryId String
   author User  @relation(fields: [userId], references: [id], onDelete: Cascade)

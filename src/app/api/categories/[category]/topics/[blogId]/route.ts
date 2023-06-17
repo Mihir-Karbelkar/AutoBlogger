@@ -21,6 +21,9 @@ export async function GET(
     where: {
       id: blogId,
     },
+    include: {
+      keywords: true,
+    },
   });
   console.log(blog);
   return NextResponse.json(
@@ -70,7 +73,7 @@ export async function PUT(
           id: category,
         },
       },
-      content: payload?.content || "",
+      content: payload?.content || null,
     },
   });
 

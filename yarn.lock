@@ -14,6 +14,11 @@
   dependencies:
     regenerator-runtime "^0.13.11"
 
+"@editorjs/editorjs@^2.27.0":
+  version "2.27.0"
+  resolved "https://registry.yarnpkg.com/@editorjs/editorjs/-/editorjs-2.27.0.tgz#ec2d6e2f42d1aa84d13eaea6a9c48b4324972c59"
+  integrity sha512-XyPnvu61Ynk4k7R/1gVYUJjrtuf9Tf0A+CZuvp2suW4z5TNHqNjBa9vRdr3ngHzhNSoZvgstrOO3zCVqVTezPg==
+
 "@eslint-community/eslint-utils@^4.2.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@eslint-community/eslint-utils/-/eslint-utils-4.4.0.tgz#a23514e8fb9af1269d5f7788aa556798d61c6b59"
@@ -338,10 +343,10 @@ acorn@^8.8.0:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.8.2.tgz#1b2f25db02af965399b9776b0c2c391276d37c4a"
   integrity sha512-xjIYgE8HBrkpd/sJqOGNspf8uHG+NOHGOw6a/Urj8taM2EXfdNAH2oFcPeIFfsv3+kz/mJrS5VuMqbNLjCa2vw==
 
-ai@^2.1.2:
-  version "2.1.2"
-  resolved "https://registry.yarnpkg.com/ai/-/ai-2.1.2.tgz#193acdf372ce800f043e4b41e22363a1a6414891"
-  integrity sha512-WhyGH95Pv/gpgVMQT5eCyKXJh7irozr+bmpJ94somfRYBcAN2U270ii/OOHzGLrPM3liTbBilGQL2Ds7/5sz9Q==
+ai@^2.1.3:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/ai/-/ai-2.1.3.tgz#5c13ab641a49a88af34779c5bf7c0080f185a40a"
+  integrity sha512-TwSSYf7YZdwTc9ZdV0qnvToesEePVvH0UlzYmLY44uOHkhNYYsPw5wh7Y+GwS/mHFBnPOm7NFDZbtFGGn+D0mQ==
   dependencies:
     eventsource-parser "1.0.0"
     nanoid "^3.3.6"
@@ -2015,6 +2020,11 @@ open@^9.1.0:
     define-lazy-prop "^3.0.0"
     is-inside-container "^1.0.0"
     is-wsl "^2.2.0"
+
+openai-edge@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/openai-edge/-/openai-edge-1.0.0.tgz#8ed5d4833dea8433ddaddaa292a0ffa7d5fbcc9d"
+  integrity sha512-psrC4fxpP87tWIUaALkqn9cW/8WxvAUOuHG93iXDzXaGsxba/+0QD1RJu2KBiwVTyB6/9q/JxIPRmrCQXD/59Q==
 
 openid-client@^5.4.0:
   version "5.4.2"
