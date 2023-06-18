@@ -1,4 +1,6 @@
+import { authOptions } from '@autoblogger/app/auth-options';
 import prisma from '@autoblogger/app/lib/prisma';
+import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
 
 export type Category = {
@@ -7,9 +9,13 @@ export type Category = {
 };
 
 export async function GET(_: NextRequest) {
+  const session = await getServerSession(authOptions);
   const categories = await prisma.category.findMany({
     orderBy: {
       name: 'asc',
+    },
+    where: {
+      userId: session?.user?.id,
     },
   });
   return NextResponse.json(
