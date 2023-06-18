@@ -1,6 +1,9 @@
 import { api } from '@autoblogger/app/lib/api';
 import BlogEditor from '../../../../components/blog-editor';
-
+export const metadata = {
+  title: 'Category creation',
+  description: '',
+};
 const getInitialData = (category: string, blogId: string) =>
   api(`/api/categories/${category}/topics/${blogId}`, {
     method: 'GET',

@@ -71,7 +71,7 @@ const TopicRow = ({ title, tags, link, index = 0, type }: TopicProps) => {
         </div>
       </div>
       <div className="mr-6">
-        <Link href={link}>
+        <Link href={link} prefetch={false}>
           <Button role="button">
             {type === 'recommended' ? 'Write' : 'Edit'}
           </Button>
