@@ -21,7 +21,7 @@ export type Topic = {
 };
 
 const getRecommendedTopicsPrompt = (category: string) => `
-Generate 5 topics with max 3 keywords and title not exceeding 6 words on '${category}' category and send it in json format.
+Generate 5 topics with max 3 keywords and title not exceeding 6 words on '${category}' category and send it in json format. The keywords for a single topic must not repeat
 
 Sample Input: Mission
 
@@ -114,19 +114,9 @@ export async function GET(
               },
               topic: topic?.title,
               keywords: {
-                connectOrCreate: topic?.keywords
-                  ?.filter(
-                    (value: string, index: number, arr: string[]) =>
-                      arr.indexOf(value) === index
-                  )
-                  ?.map((key: string) => ({
-                    where: {
-                      key,
-                    },
-                    create: {
-                      key,
-                    },
-                  })),
+                create: topic?.keywords?.map((key: string) => ({
+                  key,
+                })),
               },
               category: {
                 connect: {

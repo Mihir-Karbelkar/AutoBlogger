@@ -78,13 +78,8 @@ export async function POST(
       },
       topic: payload?.topic,
       keywords: {
-        connectOrCreate: payload.keywords.map((key: string) => ({
-          where: {
-            key,
-          },
-          create: {
-            key,
-          },
+        create: payload.keywords.map((key: string) => ({
+          key,
         })),
       },
       category: {

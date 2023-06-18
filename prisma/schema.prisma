@@ -78,7 +78,7 @@ model BlogPost {
 
 model Keyword{
   id String @id @default(cuid())
-  key String @unique
+  key String 
   blogPosts BlogPost[]
 } 
 

@@ -185,22 +185,6 @@ export async function PUT(
         },
       },
       topic: payload?.topic,
-      keywords: {
-        connectOrCreate:
-          payload?.keywords
-            ?.filter(
-              (value: string, index: number, arr: string[]) =>
-                arr.indexOf(value) === index
-            )
-            ?.map((key: string) => ({
-              where: {
-                key,
-              },
-              create: {
-                key,
-              },
-            })) || [],
-      },
       category: {
         connect: {
           id: category,
