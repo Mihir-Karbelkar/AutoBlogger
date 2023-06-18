@@ -1,5 +1,5 @@
-import { Configuration, OpenAIApi } from "openai-edge";
-import { OpenAIStream, StreamingTextResponse } from "ai";
+import { Configuration, OpenAIApi } from 'openai-edge';
+import { OpenAIStream, StreamingTextResponse } from 'ai';
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -8,20 +8,18 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 
 // IMPORTANT! Set the runtime to edge
-export const runtime = "edge";
+export const runtime = 'edge';
 
 export async function POST(req: Request) {
   const { prompt } = await req.json();
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createCompletion({
-    model: "text-davinci-003",
+    model: 'text-davinci-003',
     stream: true,
     temperature: 0.6,
     prompt: `${prompt}: `,
   });
-
-  console.log(response, "OPEN AI");
 
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response);

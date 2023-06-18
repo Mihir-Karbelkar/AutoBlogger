@@ -24,3 +24,40 @@ html {
 body {
   flex: 1;
 }
+
+.icon-dashboard {
+  mask: url(/icons/dashboard.svg);
+}
+.icon-down-arrow {
+  mask: url(/icons/down-arrow.svg);
+}
+.icon-google {
+  mask: url(/icons/google.svg);
+}
+.icon-apple {
+  mask: url(/icons/apple.svg);
+}
+
+.icon-settings {
+  mask: url(/icons/settings.svg);
+}
+.icon-transaction {
+  mask: url(/icons/transaction.svg);
+}
+.icon-users {
+  mask: url(/icons/users.svg);
+}
+.icon-bell {
+  mask: url(/icons/bell.svg);
+}
+.icon-search {
+  mask: url(/icons/search.svg);
+}
+
+.icon {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background: white;
+  mask-size: cover;
+}

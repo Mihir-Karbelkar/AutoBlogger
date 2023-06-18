@@ -19,6 +19,7 @@ model User {
   sessions              Session[]
   password              String?
   blogs   BlogPost[]
+  categories Category[]
 }
 model Account {
   id                 String    @id @default(cuid())
@@ -64,13 +65,15 @@ model VerificationRequest {
 
 model BlogPost {
   id String @id @default(cuid())
-  content Json?
+  content String?
   userId String
   categoryId String
   author User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   keywords Keyword[]
   topic String
+  recommended Boolean? @default(false)
+  fetched Boolean?
 }
 
 model Keyword{
@@ -81,6 +84,10 @@ model Keyword{
 
 model Category{
   id String @id @default(cuid())
-  name String @unique
+  name String
   blogs BlogPost[]
+  fetched Boolean?
+    userId String
+  author User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([name, userId])
 }

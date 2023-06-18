@@ -1,6 +1,8 @@
-import { delay } from "@autoblogger/app/lib/delay";
-import prisma from "@autoblogger/app/lib/prisma";
-import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from '@autoblogger/app/auth-options';
+import { delay } from '@autoblogger/app/lib/delay';
+import prisma from '@autoblogger/app/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse } from 'next/server';
 
 export type Category = {
   id: string;

@@ -1,72 +1,89 @@
-"use client";
-import dynamic from "next/dynamic";
-import { redirect, useRouter } from "next/navigation";
-import { useRef, useState, useEffect } from "react";
-import EditorJS from "@editorjs/editorjs";
-import { useCompletion } from "ai/react";
-import { Keyword } from "@prisma/client";
+'use client';
+import dynamic from 'next/dynamic';
+import { redirect, useRouter } from 'next/navigation';
+import { useRef, useState, useEffect } from 'react';
+import EditorJS, { OutputData } from '@editorjs/editorjs';
+import { useCompletion } from 'ai/react';
+import { Keyword } from '@prisma/client';
+import Loading from './loading';
+import TextareaAutosize from 'react-textarea-autosize';
+import { api } from '@autoblogger/app/lib/api';
+import Button from '@autoblogger/app/components/overriden/button';
 
-const Editor = dynamic(() => import("@autoblogger/app/components/editor"));
+const Editor = dynamic(() => import('@autoblogger/app/components/editor'), {
+  ssr: false,
+});
 
 export default function BlogEditor(props: {
   defaultValue: string;
   category: string;
   blogId: string;
-  mode: "edit" | "view";
+  mode: 'edit' | 'view';
   keywords: Keyword[];
   topic: string;
 }) {
   const { defaultValue, category, blogId, mode, topic, keywords } = props;
   const [content, setContent] = useState(defaultValue);
+  const [title, setTitle] = useState<string>(topic);
   const router = useRouter();
   const blogEditorRef = useRef<EditorJS>();
   const { complete, completion, isLoading } = useCompletion({
-    api: "/api/completion",
+    api: '/api/completion',
   });
-
-  console.log(completion, "Completion");
   return (
-    <div className="relative">
-      <Editor
+    <div className="relative mt-10">
+      {/* <Editor
         defaultValue={defaultValue}
         onChange={(currentContent) => {
           setContent(currentContent);
         }}
         setContents={completion}
-      />
-      {/* <Editor editorRef={blogEditorRef} holder="blog-editor" /> */}
-      <button
-        onClick={async () => {
-          complete(
-            `Write a blog in 50 words on ${topic} with keywords - ${keywords
-              .map((key) => key.key)
-              .join(", ")} :`
-          );
-        }}
-      >
-        save
-      </button>
-      <button
-        className="absolute right-5 top-3 z-10"
-        type="button"
-        onClick={() => {
-          const payload = {
-            content,
-          };
-          fetch(`/api/categories/${category}/topics/${blogId}`, {
-            method: "PUT",
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(payload),
-          }).then(() => {
-            router.push(`/dashboard/${category}`);
-          });
-        }}
-      >
-        Publish
-      </button>
+      /> */}
+      <div className="flex justify-center">
+        <div className="w-[80%] relative">
+          <TextareaAutosize
+            value={title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+            placeholder="Title"
+            className="w-full resize-none appearance-none overflow-hidden bg-transparent text-5xl font-bold focus:outline-none"
+          />
+          <Editor
+            defaultValue={defaultValue}
+            editorRef={blogEditorRef}
+            holder="blog-editor"
+            onChange={(con) => {
+              setContent(con);
+            }}
+          />
+          <Button
+            className="absolute right-5 top-3 z-10 w-auto"
+            type="button"
+            onClick={() => {
+              const payload = {
+                content,
+                topic: title,
+              };
+              fetch(`/api/categories/${category}/topics/${blogId}`, {
+                method: 'PUT',
+                headers: {
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                cache: 'no-cache',
+              }).then(() => {
+                router.push(`/dashboard/${category}`);
+              });
+            }}
+          >
+            Save
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
+
+// export default Loading;

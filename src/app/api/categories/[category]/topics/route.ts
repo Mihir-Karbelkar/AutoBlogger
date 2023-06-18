@@ -1,7 +1,8 @@
-import { delay } from "@autoblogger/app/lib/delay";
-import prisma from "@autoblogger/app/lib/prisma";
-import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
+import { authOptions } from '@autoblogger/app/auth-options';
+import { delay } from '@autoblogger/app/lib/delay';
+import prisma from '@autoblogger/app/lib/prisma';
+import { getServerSession } from 'next-auth';
+import { NextRequest, NextResponse } from 'next/server';
 export type Tag = {
   link: string;
   name: string;
@@ -18,21 +19,37 @@ export async function GET(
   { params }: { params: { category: string } }
 ) {
   const { category } = params;
-  await delay(2000);
-  const session = await getServerSession();
-  const blogs = await prisma.blogPost.findMany({
+  const session = await getServerSession(authOptions);
+  const dbCat = await prisma.category.findFirst({
     where: {
-      categoryId: category,
-      userId: session?.user?.id,
-    },
-    include: {
-      keywords: true,
+      id: category,
+      userId: session?.user.id,
     },
   });
-
+  const blogs =
+    dbCat?.name === 'All'
+      ? await prisma.blogPost.findMany({
+          where: {
+            userId: session?.user?.id,
+            recommended: false,
+          },
+          include: {
+            keywords: true,
+          },
+        })
+      : await prisma.blogPost.findMany({
+          where: {
+            categoryId: category,
+            userId: session?.user?.id,
+            recommended: false,
+          },
+          include: {
+            keywords: true,
+          },
+        });
   const topics = blogs.map((blog) => ({
     title: blog.topic,
-    tags: blog.keywords.map((keyword) => keyword.key),
+    tags: blog.keywords.map((keyword) => ({ name: keyword.key, link: '' })),
     link: `/categories/${category}/blogs/${blog.id}?mode=edit`,
   }));
 
@@ -51,14 +68,13 @@ export async function POST(
   { params: { category } }: { params: { category: string } }
 ) {
   const payload = await req.json();
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const blog = await prisma.blogPost.create({
     data: {
       ...payload,
       author: {
         connect: {
           id: session?.user?.id,
-          email: session?.user?.email,
         },
       },
       topic: payload?.topic,
@@ -89,5 +105,3 @@ export async function POST(
     }
   );
 }
-
-export const revalidate = 0;
