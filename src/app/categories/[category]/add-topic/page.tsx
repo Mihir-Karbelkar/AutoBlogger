@@ -18,7 +18,6 @@ export default function EditTopic({
     fetch(`/api/categories`, { cache: 'no-cache' })
       .then((data) => data.json())
       .then((data) => {
-        console.log(data, 'DATA');
         setCategory(
           data['data'].find((cat: { id: string }) => cat.id === category)
         );

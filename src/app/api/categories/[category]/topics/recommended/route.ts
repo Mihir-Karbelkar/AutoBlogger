@@ -75,7 +75,6 @@ export async function GET(
       userId: session?.user.id,
     },
   });
-  console.log(dbCat, 'DB CAT');
   let topics: Topic[] = [];
   let blogs =
     dbCat?.name === 'All'

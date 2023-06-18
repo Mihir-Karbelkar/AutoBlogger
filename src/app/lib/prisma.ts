@@ -16,7 +16,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 prisma.$use(async (params, next) => {
   const result = await next(params);
-  console.log(JSON.stringify(params), 'PARAMS');
   if (params.action === 'create' && params.model === 'Account') {
     const userId = params?.args?.data?.userId;
     const defaultCategories = [
