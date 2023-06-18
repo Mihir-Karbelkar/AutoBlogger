@@ -23,7 +23,7 @@ export default function EditTopic({
           data['data'].find((cat: { id: string }) => cat.id === category)
         );
       });
-  }, []);
+  }, [category]);
   return (
     <>
       <div className="relative h-full w-full bg-secondary">

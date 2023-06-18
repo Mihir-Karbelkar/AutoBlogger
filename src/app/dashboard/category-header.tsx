@@ -38,12 +38,12 @@ export default function CategoryHeader({
           {categories
             .map((link) => ({
               ...link,
-              link: `/dashboard/${link.id}?categoryName=${link.label}`,
+              link: `/dashboard/${link.id}`,
             }))
             .map((link) => (
               <Link
                 key={`/dashboard/${link.link}`}
-                href={`/dashboard/${link.id}`}
+                href={`/dashboard/${link.id}?categoryName=${link.label}`}
                 className={`w-full flex items-center text-primary text-lg mb-6 ${
                   link.link === segment ? 'font-bold text-2xl' : ''
                 }`}

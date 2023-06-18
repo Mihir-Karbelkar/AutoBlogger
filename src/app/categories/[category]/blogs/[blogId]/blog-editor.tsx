@@ -27,9 +27,7 @@ export default function BlogEditor(props: {
   const [title, setTitle] = useState<string>(topic);
   const router = useRouter();
   const blogEditorRef = useRef<EditorJS>();
-  const { complete, completion, isLoading } = useCompletion({
-    api: '/api/completion',
-  });
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   return (
     <div className="relative mt-10">
       {/* <Editor
@@ -58,9 +56,12 @@ export default function BlogEditor(props: {
             }}
           />
           <Button
-            className="absolute right-5 top-3 z-10 w-auto"
+            className="absolute right-5 top-1 z-10 !w-20"
             type="button"
+            disabled={isLoading}
+            isLoading={isLoading}
             onClick={() => {
+              setIsLoading(true);
               const payload = {
                 content,
                 topic: title,
@@ -73,9 +74,13 @@ export default function BlogEditor(props: {
                 },
                 body: JSON.stringify(payload),
                 cache: 'no-cache',
-              }).then(() => {
-                router.push(`/dashboard/${category}`);
-              });
+              })
+                .then(() => {
+                  router.push(`/dashboard/${category}`);
+                })
+                .finally(() => {
+                  setIsLoading(false);
+                });
             }}
           >
             Save

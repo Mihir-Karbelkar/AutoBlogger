@@ -61,3 +61,11 @@ body {
   background: white;
   mask-size: cover;
 }
+.ce-header {
+  font-size: 2rem;
+  font-weight: 600;
+}
+.ce-paragraph,
+.ce-code__textarea {
+  font-size: 1.5rem !important;
+}

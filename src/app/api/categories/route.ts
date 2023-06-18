@@ -1,4 +1,3 @@
-import { delay } from '@autoblogger/app/lib/delay';
 import prisma from '@autoblogger/app/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -8,7 +7,6 @@ export type Category = {
 };
 
 export async function GET(_: NextRequest) {
-  await delay(2000);
   const categories = await prisma.category.findMany({
     orderBy: {
       name: 'asc',

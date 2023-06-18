@@ -1,5 +1,4 @@
 import { authOptions } from '@autoblogger/app/auth-options';
-import { delay } from '@autoblogger/app/lib/delay';
 import prisma from '@autoblogger/app/lib/prisma';
 import { getServerSession } from 'next-auth';
 import { NextRequest, NextResponse } from 'next/server';
@@ -73,7 +72,6 @@ Keywords: ${keywords.join(',')}
 `;
 
 const getBlog = async (title: string, keywords: string[]) => {
-  return `<p>test</p>`;
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
     temperature: 0.6,

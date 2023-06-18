@@ -1,11 +1,8 @@
 import { authOptions } from '@autoblogger/app/auth-options';
-import { delay } from '@autoblogger/app/lib/delay';
 import prisma from '@autoblogger/app/lib/prisma';
 import { getServerSession } from 'next-auth';
-import { getToken } from 'next-auth/jwt';
 import { NextRequest, NextResponse } from 'next/server';
 import { Configuration, OpenAIApi } from 'openai-edge';
-import { cookies } from 'next/headers';
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -55,10 +52,7 @@ Sample Output: {
 
 `;
 
-const testPrompt = `{"data":[{"title":"Achieving Your Mission: Strategies for Success","keywords":["strategies","success","mission","goals","achievement"]},{"title":"The Power of Purpose: How to Create a Mission","keywords":["purpose","mission","creation","vision","values"]},{"title":"Living Your Mission: The Art of Self-Exploration","keywords":["mission","self-exploration","growth","transformation","authenticity"]},{"title":"The Mission Mindset: Keys to Unlocking Your Potential","keywords":["mission mindset","unlocking potential","self-discovery","creativity","resilience"]},{"title":"From Vision to Action: Crafting Your Life Mission","keywords":["vision","action","life mission","intention","fulfillment"]}]}  `;
-
 const getRecommendedTopics = async (category: string) => {
-  return JSON.parse(testPrompt).data || [];
   const completion = await openai.createCompletion({
     model: 'text-davinci-003',
     temperature: 0.6,
