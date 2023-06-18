@@ -8,7 +8,7 @@ import {
   Tag,
 } from '../api/categories/[category]/topics/recommended/route';
 import useSWR from 'swr';
-import Button from '../components/overriden/button';
+import Button from './overriden/button';
 
 type TopicProps = {
   title: string;

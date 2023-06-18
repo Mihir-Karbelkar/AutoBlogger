@@ -1,6 +1,6 @@
 import { api } from '../lib/api';
 import { Category } from '../api/categories/route';
-import CategoryHeaderWrapper from './category-header-wrapper';
+import CategoryHeaderWrapper from '../components/category-header-wrapper';
 
 export const metadata = {
   title: 'Create Next App',

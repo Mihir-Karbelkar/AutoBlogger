@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { redirect, useSelectedLayoutSegment } from "next/navigation";
-import { Category } from "../api/categories/route";
-import CategoryHeader from "./category-header";
+import { redirect, useSelectedLayoutSegment } from 'next/navigation';
+import { Category } from '../api/categories/route';
+import CategoryHeader from './category-header';
 
 export default function CategoryHeaderWrapper({
   categories,

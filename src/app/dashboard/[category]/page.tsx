@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import RecommendedTopics from '../recommended';
-import CategoryTopics from '../topics';
+import RecommendedTopics from '../../components/recommended';
+import CategoryTopics from '../../components/topics';
 import Button from '@autoblogger/app/components/overriden/button';
 export default async function Page({
   params,

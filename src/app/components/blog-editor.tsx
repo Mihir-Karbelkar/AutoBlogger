@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import EditorJS, { OutputData } from '@editorjs/editorjs';
 import { useCompletion } from 'ai/react';
 import { Keyword } from '@prisma/client';
-import Loading from './loading';
+import Loading from '../categories/[category]/blogs/[blogId]/loading';
 import TextareaAutosize from 'react-textarea-autosize';
 import { api } from '@autoblogger/app/lib/api';
 import Button from '@autoblogger/app/components/overriden/button';

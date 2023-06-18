@@ -1,5 +1,5 @@
 import { api } from '@autoblogger/app/lib/api';
-import BlogEditor from './blog-editor';
+import BlogEditor from '../../../../components/blog-editor';
 
 const getInitialData = (category: string, blogId: string) =>
   api(`/api/categories/${category}/topics/${blogId}`, {

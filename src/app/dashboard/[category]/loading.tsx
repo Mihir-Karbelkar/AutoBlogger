@@ -1,4 +1,4 @@
-import { TopicRowSkeleton } from '../recommended';
+import { TopicRowSkeleton } from '../../components/recommended';
 
 export default async function Loading() {
   return (
