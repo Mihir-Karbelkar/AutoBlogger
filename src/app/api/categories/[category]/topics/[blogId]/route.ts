@@ -131,18 +131,18 @@ export async function GET(
   console.log(blogHtml, '0html0');
 
   const root = parse(blogHtml);
-
-  for (const img of root.querySelectorAll('img')) {
-    try {
-      const imgSrc = await getImage(img.getAttribute('alt') || '');
-      // img.setAttribute('style', 'display:none;');
-      img.setAttribute('src', `${imgSrc}` as string);
-    } catch (e) {
-      root.querySelectorAll('img').map((img) => {
-        img.remove();
-      });
-    }
-  }
+  // commented out for timeout issue
+  // for (const img of root.querySelectorAll('img')) {
+  //   try {
+  //     const imgSrc = await getImage(img.getAttribute('alt') || '');
+  //     // img.setAttribute('style', 'display:none;');
+  //     img.setAttribute('src', `${imgSrc}` as string);
+  //   } catch (e) {
+  //     root.querySelectorAll('img').map((img) => {
+  //       img.remove();
+  //     });
+  //   }
+  // }
 
   const header = root.querySelector('h1');
   if (header) {
