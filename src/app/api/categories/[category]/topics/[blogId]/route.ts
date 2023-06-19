@@ -81,7 +81,7 @@ const getBlog = async (title: string, keywords: string[]) => {
       max_tokens: 1000,
     });
     html = (await completion.json())?.choices?.[0]?.text;
-  } finally {
+  } catch {
     html = testOutput;
   }
   return html;
