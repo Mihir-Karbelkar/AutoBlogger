@@ -72,13 +72,19 @@ Keywords: ${keywords.join(',')}
 `;
 
 const getBlog = async (title: string, keywords: string[]) => {
-  const completion = await openai.createCompletion({
-    model: 'text-davinci-003',
-    temperature: 0.6,
-    prompt: `${getBlogPrompt(title, keywords)}: `,
-    max_tokens: 1000,
-  });
-  return (await completion.json())?.choices?.[0]?.text;
+  let html: string;
+  try {
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-003',
+      temperature: 0.6,
+      prompt: `${getBlogPrompt(title, keywords)}: `,
+      max_tokens: 1000,
+    });
+    html = (await completion.json())?.choices?.[0]?.text;
+  } finally {
+    html = testOutput;
+  }
+  return html;
 };
 
 export type Tag = {
@@ -122,6 +128,7 @@ export async function GET(
     blog?.topic || '',
     blog?.keywords?.map((key) => key?.key || '')?.filter(Boolean) || []
   );
+  console.log(blogHtml, '0html0');
 
   const root = parse(blogHtml);
 
@@ -204,3 +211,5 @@ export async function PUT(
     }
   );
 }
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';

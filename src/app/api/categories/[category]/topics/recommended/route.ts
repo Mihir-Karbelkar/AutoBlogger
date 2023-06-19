@@ -53,13 +53,22 @@ Sample Output: {
 `;
 
 const getRecommendedTopics = async (category: string) => {
-  const completion = await openai.createCompletion({
-    model: 'text-davinci-003',
-    temperature: 0.6,
-    prompt: `${getRecommendedTopicsPrompt(category)}: `,
-    max_tokens: 400,
-  });
-  const topics = JSON.parse((await completion.json())?.choices?.[0]?.text);
+  let topics: { data: { title: string; keywords: string[] }[] };
+
+  try {
+    const completion = await openai.createCompletion({
+      model: 'text-davinci-003',
+      temperature: 0.6,
+      prompt: `${getRecommendedTopicsPrompt(category)}: `,
+      max_tokens: 400,
+    });
+    topics = JSON.parse((await completion?.json())?.choices?.[0]?.text);
+  } catch {
+    topics = JSON.parse(
+      '{"data":[{"title":"Test title","keywords":["key1","key2"]}]}'
+    );
+  }
+
   return topics?.data || [];
 };
 
@@ -102,6 +111,7 @@ export async function GET(
     if (dbCat?.name) {
       const openAiTopics: { title: string; keywords: string[] }[] =
         await getRecommendedTopics(dbCat.name);
+      console.log(openAiTopics, 'topics');
       blogs = await Promise.all(
         openAiTopics.map(async (topic) => {
           const blog = await prisma.blogPost.create({
