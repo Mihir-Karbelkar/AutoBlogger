@@ -4,7 +4,7 @@ export default function Loading() {
       {' '}
       <div className="animate-pulse  mt-10 flex justify-center ">
         <div className="w-[80%] text-3xl text-gray-300">
-          Fetching from chat gpt (this might take time...)
+          Fetching from chat gpt (this might take time please dont refresh...)
         </div>
       </div>
       <div className="animate-pulse flex justify-center items-center mt-2 flex-col">
