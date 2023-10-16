@@ -1,11 +1,11 @@
-import { authOptions } from '@autoblogger/app/auth-options';
-import prisma from '@autoblogger/app/lib/prisma';
-import { getServerSession } from 'next-auth';
-import { NextRequest, NextResponse } from 'next/server';
-import Replicate from 'replicate';
-import { parse } from 'node-html-parser';
-import { Configuration, OpenAIApi } from 'openai-edge';
-import { data } from 'autoprefixer';
+import { authOptions } from "@autoblogger/app/auth-options";
+import prisma from "@autoblogger/app/lib/prisma";
+import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server";
+import Replicate from "replicate";
+import { parse } from "node-html-parser";
+import { Configuration, OpenAIApi } from "openai-edge";
+import { data } from "autoprefixer";
 
 const config = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
@@ -13,7 +13,7 @@ const config = new Configuration({
 const openai = new OpenAIApi(config);
 const replicate = new Replicate({
   // get your token from https://replicate.com/account
-  auth: process.env.REPLICATE_API_TOKEN || '',
+  auth: process.env.REPLICATE_API_TOKEN || "",
 });
 
 const testOutput = `
@@ -54,7 +54,7 @@ const testOutput = `
 const getImage = async (prompt: string) => {
   // return 'https://replicate.delivery/pbxt/ZXD8AIyWSzboM1dZeDEGa2UOZ8L900hFCaiEAuQeh2MfFKOiA/out-0.png';
   const output = await replicate?.run(
-    'stability-ai/stable-diffusion:db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf',
+    "stability-ai/stable-diffusion:db21e45d3f7023abc2a46ee38a23973f6dce16bb082a930b0c49861f96d1e5bf",
     {
       input: {
         prompt: `image for a blog with description '${prompt}'`,
@@ -68,14 +68,15 @@ const getImage = async (prompt: string) => {
 const getBlogPrompt = (title: string, keywords: string[]) => `
 Write a blog in 300 words on ${title} and send it in HTML. Add images wherever neccessary (not more than 3) with a descriptive alt description and src attribute should not be there
 Title: ${title}
-Keywords: ${keywords.join(',')}
+Keywords: ${keywords.join(",")}
 `;
 
 const getBlog = async (title: string, keywords: string[]) => {
-  let html: string;
+  let html: string,
+    isChatGptArticle = true;
   try {
     const completion = await openai.createCompletion({
-      model: 'text-davinci-003',
+      model: "text-davinci-003",
       temperature: 0.6,
       prompt: `${getBlogPrompt(title, keywords)}: `,
       max_tokens: 1000,
@@ -84,7 +85,11 @@ const getBlog = async (title: string, keywords: string[]) => {
   } catch {
     html = testOutput;
   }
-  return html;
+  if (!html) {
+    html = testOutput;
+    isChatGptArticle = false;
+  }
+  return { html, isChatGptArticle };
 };
 
 export type Tag = {
@@ -124,27 +129,26 @@ export async function GET(
         status: 200,
       }
     );
-  const blogHtml = await getBlog(
-    blog?.topic || '',
-    blog?.keywords?.map((key) => key?.key || '')?.filter(Boolean) || []
+  const { html: blogHtml, isChatGptArticle } = await getBlog(
+    blog?.topic || "",
+    blog?.keywords?.map((key) => key?.key || "")?.filter(Boolean) || []
   );
-  console.log(blogHtml, '0html0');
+  console.log(blogHtml, "0html0");
 
   const root = parse(blogHtml);
-  // commented out for timeout issue
-  for (const img of root.querySelectorAll('img')) {
-    try {
-      const imgSrc = await getImage(img.getAttribute('alt') || '');
-      // img.setAttribute('style', 'display:none;');
-      img.setAttribute('src', `${imgSrc}` as string);
-    } catch (e) {
-      root.querySelectorAll('img').map((img) => {
-        img.remove();
-      });
-    }
-  }
+  // for (const img of root.querySelectorAll("img")) {
+  //   try {
+  //     const imgSrc = await getImage(img.getAttribute("alt") || "");
+  //     // img.setAttribute('style', 'display:none;');
+  //     img.setAttribute("src", `${imgSrc}` as string);
+  //   } catch (e) {
+  //     root.querySelectorAll("img").map((img) => {
+  //       img.remove();
+  //     });
+  //   }
+  // }
 
-  const header = root.querySelector('h1');
+  const header = root.querySelector("h1");
   if (header) {
     header.remove();
   }
@@ -154,7 +158,7 @@ export async function GET(
       id: blogId,
     },
     data: {
-      content: root.querySelector('body')?.innerHTML || root?.innerHTML,
+      content: root.querySelector("body")?.innerHTML || root?.innerHTML,
       fetched: true,
     },
     include: {
@@ -165,6 +169,7 @@ export async function GET(
   return NextResponse.json(
     {
       data: updatedBlog,
+      isChatGptArticle,
     },
     {
       status: 200,
@@ -212,4 +217,4 @@ export async function PUT(
   );
 }
 export const revalidate = 0;
-export const fetchCache = 'force-no-store';
+export const fetchCache = "force-no-store";

@@ -1,16 +1,18 @@
-import './globals.css';
-import { Inter } from 'next/font/google';
-import { getServerSession } from 'next-auth';
-import AuthContext from './auth-context';
-import { authOptions } from './auth-options';
-import { GTM_ID } from './lib/gtm';
-import GoogleAnalytics from './components/google-analytics';
-import { Suspense } from 'react';
-const inter = Inter({ subsets: ['latin'] });
+import "./globals.css";
+import { Inter } from "next/font/google";
+import { getServerSession } from "next-auth";
+import AuthContext from "./auth-context";
+import { authOptions } from "./auth-options";
+import { GTM_ID } from "./lib/gtm";
+import GoogleAnalytics from "./components/google-analytics";
+import { Suspense } from "react";
+import { Toaster } from "./components/ui/toaster";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'Homepage',
-  description: '',
+  title: "Homepage",
+  description: "",
 };
 
 export default async function RootLayout({
@@ -28,7 +30,10 @@ export default async function RootLayout({
             <GoogleAnalytics googleAnalyticsId={googleAnalyticsId} />
           </Suspense>
         </head>
-        <body className={inter.className}>{children}</body>
+        <body className={inter.className}>
+          {children}
+          <Toaster />
+        </body>
       </html>
     </AuthContext>
   );

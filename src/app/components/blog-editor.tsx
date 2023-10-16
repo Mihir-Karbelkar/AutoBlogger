@@ -1,16 +1,18 @@
-'use client';
-import dynamic from 'next/dynamic';
-import { redirect, useRouter } from 'next/navigation';
-import { useRef, useState, useEffect } from 'react';
-import EditorJS, { OutputData } from '@editorjs/editorjs';
-import { useCompletion } from 'ai/react';
-import { Keyword } from '@prisma/client';
-import Loading from '../categories/[category]/blogs/[blogId]/loading';
-import TextareaAutosize from 'react-textarea-autosize';
-import { api } from '@autoblogger/app/lib/api';
-import Button from '@autoblogger/app/components/overriden/button';
+"use client";
+import dynamic from "next/dynamic";
+import { redirect, useRouter } from "next/navigation";
+import { useRef, useState, useEffect } from "react";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
+import { useCompletion } from "ai/react";
+import { Keyword } from "@prisma/client";
+import Loading from "../categories/[category]/blogs/[blogId]/loading";
+import TextareaAutosize from "react-textarea-autosize";
+import { api } from "@autoblogger/app/lib/api";
+import Button from "@autoblogger/app/components/overriden/button";
+import { useToast } from "./ui/use-toast";
+import { ToastAction } from "./ui/toast";
 
-const Editor = dynamic(() => import('@autoblogger/app/components/editor'), {
+const Editor = dynamic(() => import("@autoblogger/app/components/editor"), {
   ssr: false,
 });
 
@@ -18,16 +20,32 @@ export default function BlogEditor(props: {
   defaultValue: string;
   category: string;
   blogId: string;
-  mode: 'edit' | 'view';
+  mode: "edit" | "view";
   keywords: Keyword[];
   topic: string;
+  isChatGptArticle: boolean;
 }) {
-  const { defaultValue, category, blogId, mode, topic, keywords } = props;
+  const { defaultValue, category, blogId, mode, topic, isChatGptArticle } =
+    props;
   const [content, setContent] = useState(defaultValue);
   const [title, setTitle] = useState<string>(topic);
   const router = useRouter();
   const blogEditorRef = useRef<EditorJS>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    console.log(isChatGptArticle, "IS CHATGPT");
+    if (!isChatGptArticle) {
+      toast({
+        title: "My tokens ran out 😅",
+        duration: Infinity,
+        description:
+          "This is a dummy article that will show up if my trial period ends. Ability to add your tokens coming soon",
+        variant: "default",
+      });
+    }
+  }, [isChatGptArticle]);
   return (
     <div className="relative mt-10">
       {/* <Editor
@@ -67,13 +85,13 @@ export default function BlogEditor(props: {
                 topic: title,
               };
               fetch(`/api/categories/${category}/topics/${blogId}`, {
-                method: 'PUT',
+                method: "PUT",
                 headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
+                  Accept: "application/json",
+                  "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload),
-                cache: 'no-cache',
+                cache: "no-cache",
               })
                 .then(() => {
                   router.push(`/dashboard/${category}`);
