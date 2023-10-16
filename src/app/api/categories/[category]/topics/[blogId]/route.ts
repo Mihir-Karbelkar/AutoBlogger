@@ -138,6 +138,7 @@ export async function GET(
   const root = parse(blogHtml);
   for (const img of root.querySelectorAll("img")) {
     try {
+      if (!process.env.ENABLE_REPLICATE) throw 1;
       const imgSrc = await getImage(img.getAttribute("alt") || "");
       // img.setAttribute('style', 'display:none;');
       img.setAttribute("src", `${imgSrc}` as string);
@@ -147,7 +148,6 @@ export async function GET(
       });
     }
   }
-
   const header = root.querySelector("h1");
   if (header) {
     header.remove();
